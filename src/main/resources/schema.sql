@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS alumno
+(id INT NOT NULL AUTO_INCREMENT,
+nombre VARCHAR(255),
+apellido VARCHAR(255),
+estado BOOLEAN,
+edad INT,
+PRIMARY KEY (id));
