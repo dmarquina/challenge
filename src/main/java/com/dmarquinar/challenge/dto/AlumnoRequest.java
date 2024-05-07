@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.*;
 
 @Data
-public class RequestAlumno {
+public class AlumnoRequest {
 
     @NotNull(message = "id requerido")
     private Long id;

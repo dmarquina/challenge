@@ -1,14 +1,13 @@
 package com.dmarquinar.challenge.service.impl;
 
-import com.dmarquinar.challenge.dto.RequestAlumno;
+import com.dmarquinar.challenge.dto.AlumnoResponse;
+import com.dmarquinar.challenge.dto.AlumnoRequest;
 import com.dmarquinar.challenge.exceptionhandler.AlumnoAlreadyExistsException;
 import com.dmarquinar.challenge.model.Alumno;
 import com.dmarquinar.challenge.repository.AlumnoRepository;
 import com.dmarquinar.challenge.service.AlumnoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -19,21 +18,28 @@ public class AlumnoServiceImpl implements AlumnoService {
     private AlumnoRepository alumnoRepository;
 
     @Override
-    public Flux<Alumno> findAlumnosActivos() {
-        return alumnoRepository.findByEstadoActivo();
+    public Flux<AlumnoResponse> findAlumnosActivos() {
+        return alumnoRepository.findByEstadoActivo()
+                .map(alumno -> new AlumnoResponse(
+                        alumno.getId(),
+                        alumno.getNombre(),
+                        alumno.getApellido(),
+                        alumno.getEstado(),
+                        alumno.getEdad()
+                ));
     }
 
     @Override
-    public Mono<Void> createAlumno(RequestAlumno requestAlumno) {
-        return alumnoRepository.findById(requestAlumno.getId())
+    public Mono<Void> createAlumno(AlumnoRequest alumnoRequest) {
+        return alumnoRepository.findById(alumnoRequest.getId())
                 .flatMap(existingAlumno -> Mono.error(new AlumnoAlreadyExistsException()))
                 .switchIfEmpty(Mono.defer(() -> {
                     Alumno alumno = new Alumno();
-                    alumno.setId(requestAlumno.getId());
-                    alumno.setNombre(requestAlumno.getNombre());
-                    alumno.setApellido(requestAlumno.getApellido());
-                    alumno.setEstado(requestAlumno.getEstado());
-                    alumno.setEdad(requestAlumno.getEdad());
+                    alumno.setId(alumnoRequest.getId());
+                    alumno.setNombre(alumnoRequest.getNombre());
+                    alumno.setApellido(alumnoRequest.getApellido());
+                    alumno.setEstado(alumnoRequest.getEstado());
+                    alumno.setEdad(alumnoRequest.getEdad());
                     return alumnoRepository.saveAlumno(alumno).then();
                 })).then();
     }
