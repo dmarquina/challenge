@@ -1,40 +1,29 @@
 package com.dmarquinar.challenge.dto;
 
+import com.dmarquinar.challenge.model.Estado;
+import lombok.Data;
+
+import javax.validation.constraints.*;
+
+@Data
 public class RequestAlumno {
-    String nombre;
-    String apellido;
-    boolean activo;
-    int edad;
 
-    public String getNombre() {
-        return nombre;
-    }
+    @NotNull(message = "id requerido")
+    private Long id;
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    @NotBlank(message = "Nombre requerido")
+    private String nombre;
 
-    public String getApellido() {
-        return apellido;
-    }
+    @NotBlank(message = "Apellido requerido")
+    private String apellido;
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
+    @NotNull
+    private Estado estado;
 
-    public boolean isActivo() {
-        return activo;
-    }
+    @NotNull
+    @Positive
+    @Max(120)
+    private int edad;
 
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
 
-    public int getEdad() {
-        return edad;
-    }
-
-    public void setEdad(int edad) {
-        this.edad = edad;
-    }
 }

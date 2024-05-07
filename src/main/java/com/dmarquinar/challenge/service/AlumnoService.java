@@ -5,10 +5,8 @@ import com.dmarquinar.challenge.model.Alumno;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 public interface AlumnoService {
-    Flux<Alumno> findAlumnos();
+    Flux<Alumno> findAlumnosActivos();
 
-    Mono<Alumno> createAlumno(RequestAlumno requestAlumno) throws Exception;
+    Mono<Void> createAlumno(RequestAlumno requestAlumno) throws Exception;
 }
